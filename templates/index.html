@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>House Price Prediction | ML Project</title>
+
+<!-- Bootstrap -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+/* ===== GLOBAL ===== */
+body {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ===== GLASS CARD ===== */
+.card {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 22px;
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    animation: fadeIn 1.2s ease;
+}
+
+/* ===== HEADER ===== */
+.card-header {
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    border-radius: 22px 22px 0 0;
+    color: #fff;
+}
+
+.card-header h2 {
+    font-weight: 600;
+}
+
+.card-header p {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* ===== INPUTS ===== */
+.form-group {
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ced4da;
+}
+
+.form-control {
+    padding-left: 45px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.9);
+    border: none;
+    transition: 0.3s;
+}
+
+.form-control:focus {
+    transform: scale(1.03);
+    box-shadow: 0 0 15px rgba(0,123,255,0.6);
+}
+
+/* ===== BUTTON ===== */
+.btn-custom {
+    background: linear-gradient(135deg, #ff512f, #dd2476);
+    border: none;
+    border-radius: 30px;
+    padding: 14px 50px;
+    font-size: 18px;
+    color: #fff;
+    transition: 0.4s;
+}
+
+.btn-custom:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+}
+
+/* ===== PREDICTION ===== */
+.prediction-box {
+    background: linear-gradient(135deg, #ffffff, #e3f2fd);
+    border-radius: 18px;
+    padding: 22px;
+    margin-top: 30px;
+    font-size: 22px;
+    font-weight: 600;
+    color: #0d47a1;
+    animation: glow 1.5s infinite alternate;
+}
+
+/* ===== FOOTER ===== */
+footer {
+    margin-top: 35px;
+    color: #f1f1f1;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glow {
+    from { box-shadow: 0 0 12px rgba(33,150,243,0.4); }
+    to { box-shadow: 0 0 30px rgba(33,150,243,0.9); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container mt-5 mb-5">
+<div class="card">
+
+<!-- HEADER -->
+<div class="card-header text-center">
+    <h2>🏠 House Price Prediction</h2>
+    <p>Machine Learning Based Smart Estimation System</p>
+</div>
+
+<!-- BODY -->
+<div class="card-body">
+
+<form action="/predict" method="POST">
+
+<!-- ROW 1 -->
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <i class="fa-solid fa-bed input-icon"></i>
+        <input type="number" class="form-control" name="bedrooms" placeholder="Bedrooms" required>
+    </div>
+    <div class="form-group col-md-4">
+        <i class="fa-solid fa-bath input-icon"></i>
+        <input type="number" step="any" class="form-control" name="bathrooms" placeholder="Bathrooms" required>
+    </div>
+    <div class="form-group col-md-4">
+        <i class="fa-solid fa-ruler-combined input-icon"></i>
+        <input type="number" class="form-control" name="sqft_living" placeholder="Sqft Living" required>
+    </div>
+</div>
+
+<!-- ROW 2 -->
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <i class="fa-solid fa-tree input-icon"></i>
+        <input type="number" class="form-control" name="sqft_lot" placeholder="Sqft Lot" required>
+    </div>
+    <div class="form-group col-md-4">
+        <i class="fa-solid fa-building input-icon"></i>
+        <input type="number" step="any" class="form-control" name="floors" placeholder="Floors" required>
+    </div>
+    <div class="form-group col-md-4">
+        <i class="fa-solid fa-water input-icon"></i>
+        <input type="number" class="form-control" name="waterfront" placeholder="Waterfront (0 / 1)" required>
+    </div>
+</div>
+
+<!-- ROW 3 -->
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <i class="fa-solid fa-eye input-icon"></i>
+        <input type="number" class="form-control" name="view" placeholder="View Rating" required>
+    </div>
+    <div class="form-group col-md-4">
+        <i class="fa-solid fa-star input-icon"></i>
+        <input type="number" class="form-control" name="condition" placeholder="Condition" required>
+    </div>
+    <div class="form-group col-md-4">
+        <i class="fa-solid fa-house input-icon"></i>
+        <input type="number" class="form-control" name="sqft_above" placeholder="Sqft Above" required>
+    </div>
+</div>
+
+<!-- ROW 4 -->
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <i class="fa-solid fa-warehouse input-icon"></i>
+        <input type="number" class="form-control" name="sqft_basement" placeholder="Sqft Basement" required>
+    </div>
+    <div class="form-group col-md-4">
+        <i class="fa-solid fa-calendar input-icon"></i>
+        <input type="number" class="form-control" name="yr_built" placeholder="Year Built" required>
+    </div>
+    <div class="form-group col-md-4">
+        <i class="fa-solid fa-screwdriver-wrench input-icon"></i>
+        <input type="number" class="form-control" name="yr_renovated" placeholder="Year Renovated" required>
+    </div>
+</div>
+
+<!-- DATE -->
+<div class="form-group">
+    <label class="text-white font-weight-bold">📅 Select Date (2014)</label>
+    <input type="date" class="form-control" id="dateInput"
+           min="2014-01-01" max="2014-12-30" required>
+</div>
+
+<input type="hidden" name="year" id="year">
+<input type="hidden" name="month" id="month">
+<input type="hidden" name="day" id="day">
+
+<!-- BUTTON -->
+<div class="text-center">
+    <button type="submit" class="btn btn-custom mt-4">
+        <i class="fa-solid fa-chart-line"></i> Predict Price
+    </button>
+</div>
+
+</form>
+
+<!-- RESULT -->
+<div class="prediction-box text-center">
+    💰 Estimated House Price: {{ prediction_text }}
+</div>
+
+</div>
+</div>
+
+<footer>
+    <h6>Project By Ganesh</h6>
+    <p>Data Analyst | Machine Learning Enthusiast</p>
+</footer>
+
+</div>
+
+<script>
+document.getElementById("dateInput").addEventListener("change", function () {
+    let date = new Date(this.value);
+    document.getElementById("year").value = date.getFullYear();
+    document.getElementById("month").value = date.getMonth() + 1;
+    document.getElementById("day").value = date.getDate();
+});
+</script>
+
+</body>
+</html>
